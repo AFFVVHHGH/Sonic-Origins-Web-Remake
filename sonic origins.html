@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonic Origins - Ultimate Custom Hub</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background: radial-gradient(circle at center, #0c1224 0%, #03060d 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        /* Dashboard Navigation Sidebar */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, #090e1a 0%, #04070f 100%);
+            border-right: 2px solid #1a263f;
+            padding: 35px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 10px 0 35px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+        .sidebar h2 {
+            font-size: 1.4rem;
+            color: #00bfff;
+            letter-spacing: 4px;
+            text-align: center;
+            margin: 0 0 30px 0;
+            font-weight: 900;
+            text-transform: uppercase;
+            animation: textGlow 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 10px rgba(0, 191, 255, 0.3), 0 0 20px rgba(0, 191, 255, 0.2);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 191, 255, 0.7), 0 0 30px rgba(0, 191, 255, 0.4);
+            }
+        }
+        .launcher-btn {
+            background: rgba(23, 31, 51, 0.6);
+            border: 1px solid #1f2d4a;
+            color: #a3b8cc;
+            padding: 18px 22px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 12px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            width: 100%;
+        }
+        .launcher-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: #0084ff;
+            transition: width 0.25s ease;
+        }
+        .launcher-btn:hover {
+            color: #ffffff;
+            background: #17223b;
+            border-color: #00bfff;
+            transform: translateX(8px);
+            box-shadow: -5px 5px 15px rgba(0, 191, 255, 0.15);
+        }
+        .launcher-btn:hover::before {
+            width: 5px;
+        }
+        .launcher-btn.active {
+            background: linear-gradient(90deg, #0052d4 0%, #4364f7 50%, #6fb1fc 100%);
+            color: #ffffff;
+            border-color: #00f0ff;
+            box-shadow: 0 0 25px rgba(67, 100, 247, 0.6);
+        }
+        /* Main Viewport Workspace Display */
+        .main-viewport {
+            flex-grow: 1;
+            background: #000000;
+            position: relative;
+            border: 10px solid #04070f;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        iframe.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Welcome Splash Screen */
+        .welcome-msg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(15, 20, 34, 0.4);
+            border: 1px solid #1a263f;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            z-index: 5;
+        }
+        .welcome-msg h2 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin: 0 0 15px 0;
+        }
+        .welcome-msg p {
+            color: #6c7d93;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left Selection Dock -->
+    <nav class="sidebar">
+        <h2>SONIC ORIGINS</h2>
+        <button class="launcher-btn" onclick="bootGame('s1', this)">Sonic 1 Mobile</button>
+        <button class="launcher-btn" onclick="bootGame('s2', this)">Sonic 2 Mobile</button>
+        <button class="launcher-btn" onclick="bootGame('scd', this)">Sonic CD Mobile</button>
+        <button class="launcher-btn" onclick="bootGame('s3', this)">Sonic 3 Air</button>
+        <button class="launcher-btn" onclick="bootGame('smania', this)">Sonic Mania Plus</button>
+        <button class="launcher-btn" onclick="bootGame('gust', this)">GUST Browser</button>
+        <button class="launcher-btn" onclick="bootGame('nautilus', this)">Nautilus OS</button>
+    </nav>
+
+    <!-- Right Window Content Display -->
+    <main class="main-viewport">
+        <div id="welcome" class="welcome-msg">
+            <h2>WELCOME TO THE RSDK HUD</h2>
+            <p>Select a classic sonic the hedgehog remaster made in RDSK from the sidebar to launch the engine</p>
+        </div>
+
+        <!-- Dynamic Content Displays -->
+        <iframe id="s1" data-src="https://sonic-forever.vercel.app/"></iframe>
+        <iframe id="s2" data-src="https://sonic-2-mobile-online-webport.vercel.app/"></iframe>
+        <iframe id="scd" data-src="https://sonic-cd-mobile-online.vercel.app"></iframe>
+        <iframe id="s3" data-src="https://sonic3air-online.vercel.app"></iframe>
+        <iframe id="smania" data-src="https://sonic-mania-plus-webport.vercel.app"></iframe>
+        <iframe id="gust" data-src="https://gust-browser-lime.vercel.app"></iframe>
+        <iframe id="nautilus" data-src="https://online-os.vercel.app"></iframe>
+    </main>
+
+    <script>
+        function bootGame(frameId, buttonElement) {
+            // Drop out welcoming text panel overlay
+            document.getElementById('welcome').style.display = 'none';
+
+            // SILENCE AND CLEAN slate: Wipes inactive frames completely to kill old audios
+            document.querySelectorAll('iframe').forEach(f => {
+                if (f.id !== frameId && f.src !== "") {
+                    f.src = "";
+                    f.classList.remove('visible');
+                }
+            });
+
+            document.querySelectorAll('.launcher-btn').forEach(b => b.classList.remove('active'));
+
+            // Wake up the target frame link dynamically
+            const activeFrame = document.getElementById(frameId);
+            if (activeFrame.src === "" || activeFrame.src !== activeFrame.getAttribute('data-src')) {
+                activeFrame.src = activeFrame.getAttribute('data-src');
+            }
+            
+            activeFrame.classList.add('visible');
+            buttonElement.classList.add('active');
+
+            // Focus window keys to the display
+            setTimeout(() => {
+                activeFrame.focus();
+            }, 250);
+        }
+    </script>
+</body>
+</html><script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_6fHP4dqt7e2WrmgWNQr1DCv1Hkir" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
